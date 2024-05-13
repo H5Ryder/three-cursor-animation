@@ -1,6 +1,7 @@
 uniform vec2 uResolution;
 uniform sampler2D uPictureTexture;
 uniform sampler2D uDisplacementTexture;
+uniform float uTime;
 varying vec3 vColor;
 
 attribute float aIntensity;
@@ -16,8 +17,8 @@ void main() {
     displacementIntensity = smoothstep(0.1, 0.2, displacementIntensity);
 
     vec3 displacement = vec3(
-        cos(aAngle),
-        sin(aAngle),
+        cos(aAngle*uTime),
+        sin(aAngle*uTime),
         1.0
     );
     displacement = normalize(displacement);
@@ -25,6 +26,7 @@ void main() {
     displacement *= 3.0;
     displacement *= aIntensity;
     newPosition += displacement;
+    
 
 
     // Final position

@@ -160,6 +160,7 @@ const particlesMaterial = new THREE.ShaderMaterial({
     ),
     uPictureTexture: new THREE.Uniform(textureLoader.load("./picture-1.png")),
     uDisplacementTexture: new THREE.Uniform(displacement.texture),
+    uTime: { value: 0},
   },
 });
 const particles = new THREE.Points(particlesGeometry, particlesMaterial);
@@ -168,9 +169,20 @@ scene.add(particles);
 /**
  * Animate
  */
+const clock = new THREE.Clock()
 const tick = () => {
   // Update controls
   controls.update();
+
+  // Points particles rotation
+  const elapsedTime = clock.getElapsedTime()
+  particlesMaterial.uniforms.uTime.value = elapsedTime;
+
+
+  // Mesh Rotation
+  particles.rotation.y = elapsedTime * 1
+  displacement.interactivePlane.rotation.y = elapsedTime * 1
+
 
   /**
    * Raycaster
@@ -189,7 +201,6 @@ const tick = () => {
   /**
    * Displacement
    */
-
   displacement.context.globalCompositeOperation = 'source-over'
   displacement.context.globalAlpha = 0.1
   displacement.context.fillRect(0,0, displacement.canvas.width, displacement.canvas.height)
